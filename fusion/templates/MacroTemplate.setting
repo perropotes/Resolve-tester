@@ -1,0 +1,62 @@
+{
+	Tools = ordered() {
+		MacroOperator1 = MacroOperator {
+			CtrlWZoom = false,
+			Inputs = ordered() {
+				Strength = Input { Value = 0.5, },
+				Scale = Input { Value = 1.0, },
+				CenterX = Input { Value = 0.5, },
+				CenterY = Input { Value = 0.5, },
+			},
+			UserControls = ordered() {
+				Strength = {
+					INP_Default = 0.5,
+					INP_Integer = false,
+					INP_MinScale = 0,
+					INP_MaxScale = 1,
+					LINKID_DataType = "Number",
+					LINKS_Name = "Strength",
+				},
+				Scale = {
+					INP_Default = 1,
+					INP_Integer = false,
+					INP_MinScale = 0,
+					INP_MaxScale = 4,
+					LINKID_DataType = "Number",
+					LINKS_Name = "Scale",
+				},
+				CenterX = {
+					INP_Default = 0.5,
+					INP_Integer = false,
+					INP_MinScale = 0,
+					INP_MaxScale = 1,
+					LINKID_DataType = "Number",
+					LINKS_Name = "Center X",
+				},
+				CenterY = {
+					INP_Default = 0.5,
+					INP_Integer = false,
+					INP_MinScale = 0,
+					INP_MaxScale = 1,
+					LINKID_DataType = "Number",
+					LINKS_Name = "Center Y",
+				},
+			},
+			ViewInfo = OperatorInfo { Pos = { 220, 82 } },
+		},
+		Transform1 = Transform {
+			Inputs = {
+				Size = Input {
+					SourceOp = "MacroOperator1",
+					Source = "Scale",
+					Expression = "max(0.0, Scale * (0.5 + Strength))",
+				},
+				Center = Input {
+					Value = { 0.5, 0.5 },
+					Expression = "Point(CenterX, CenterY)",
+				},
+			},
+			ViewInfo = OperatorInfo { Pos = { 330, 82 } },
+		},
+	}
+}
