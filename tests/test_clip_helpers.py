@@ -50,13 +50,23 @@ class ClipHelpersTest(unittest.TestCase):
         self.assertEqual(clip.values["blur"], 0.2)
         self.assertEqual(len(clip.keyframes), 5)
 
-    def test_raises_for_too_short_clip(self):
+    def test_raises_when_clip_cannot_fit_both_transitions(self):
         with self.assertRaises(ValueError):
             build_side_push_keyframes(
                 clip_start_frame=0,
-                clip_duration_frames=12,
+                clip_duration_frames=24,
                 config=SidePushConfig(transition_frames=12),
             )
+
+    def test_accepts_clip_longer_than_both_transitions(self):
+        keyframes = build_side_push_keyframes(
+            clip_start_frame=0,
+            clip_duration_frames=25,
+            config=SidePushConfig(transition_frames=12),
+        )
+
+        self.assertEqual(keyframes["crop_left"][1].frame, 12)
+        self.assertEqual(keyframes["crop_right"][0].frame, 12)
 
 
 if __name__ == "__main__":

@@ -63,9 +63,10 @@ def build_side_push_keyframes(
     """
 
     cfg = config or SidePushConfig()
-    if clip_duration_frames <= cfg.transition_frames:
+    minimum_duration = cfg.transition_frames * 2
+    if clip_duration_frames <= minimum_duration:
         raise ValueError(
-            "La duración del clip debe ser mayor a transition_frames para animar ambos lados."
+            "La duración del clip debe ser mayor a 2 * transition_frames para evitar solapamiento de entradas/salidas."
         )
 
     start = clip_start_frame
