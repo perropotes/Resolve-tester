@@ -224,6 +224,28 @@ local function pickProfileIndex(i)
   return math.random(1, #animationProfiles)
 end
 
+local function getCompIntroRange(comp, introFrames)
+  local defaultStart = 0
+  local defaultEnd = defaultStart + introFrames
+  if not comp or not comp.GetAttrs then
+    return defaultStart, defaultEnd
+  end
+
+  local attrs = comp:GetAttrs() or {}
+  local startFrame = tonumber(attrs.COMPN_RenderStart)
+    or tonumber(attrs.COMPN_GlobalStart)
+    or defaultStart
+  local endLimit = tonumber(attrs.COMPN_RenderEnd)
+    or tonumber(attrs.COMPN_GlobalEnd)
+
+  local endFrame = startFrame + introFrames
+  if endLimit and endFrame > endLimit then
+    endFrame = endLimit
+  end
+
+  return startFrame, endFrame
+end
+
 local fps = getTimelineFPS(timeline)
 local selectedItems = getSelectedTimelineItems(timeline)
 if #selectedItems == 0 then
@@ -259,9 +281,7 @@ for i = 1, total do
   local comp = item.comp
   local tool = item.tool
 
-  local startFrame = clip:GetStart() -- frame absoluto en timeline
-  local introStart = startFrame
-  local introEnd = startFrame + INTRO_FRAMES
+  local introStart, introEnd = getCompIntroRange(comp, INTRO_FRAMES)
 
   local tx = positions[i].x
   local ty = positions[i].y
